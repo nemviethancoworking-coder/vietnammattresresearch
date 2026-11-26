@@ -1,0 +1,173 @@
+html
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nghiên cứu Thị trường Nệm Việt Nam</title>
+<style>
+:root {
+  --primary: #1a5276;
+  --secondary: #2e86de;
+  --accent: #e74c3c;
+  --success: #27ae60;
+  --warning: #f39c12;
+  --info: #16a085;
+  --bg: #f8f9fa;
+  --text: #2c3e50;
+  --light-text: #5d6d7e;
+  --white: #ffffff;
+  --gray: #95a5a6;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #2c3e50; color: #fff; overflow: hidden; height: 100vh;
+}
+.slide-container {
+  width: 100vw; height: 100vh; position: relative; overflow: hidden;
+}
+.slide {
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 100%;
+  display: none; flex-direction: column;
+  padding: 30px 40px; overflow: hidden;
+}
+.slide.active { display: flex; }
+.slide-number {
+  position: absolute; bottom: 25px; right: 35px;
+  font-size: 13px; color: rgba(255,255,255,0.5); font-weight: 300;
+}
+.slide-content {
+  flex: 1; display: flex; flex-direction: column;
+  gap: 16px; overflow: hidden;
+}
+.slide-title {
+  font-size: 30px; font-weight: 700; color: var(--primary);
+  margin-bottom: 6px; line-height: 1.3;
+}
+.slide-subtitle {
+  font-size: 16px; color: var(--light-text); margin-bottom: 16px;
+}
+.virtual-list {
+  display: flex; flex-direction: column; gap: 12px;
+}
+.card {
+  background: var(--white); border-radius: 10px; padding: 16px 20px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+.card-title {
+  font-size: 16px; font-weight: 600; color: var(--primary); margin-bottom: 8px;
+}
+.card-body {
+  font-size: 14px; color: var(--light-text); line-height: 1.6;
+}
+.stats-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px; margin-top: 8px;
+}
+.stat-item {
+  background: var(--white); border-radius: 10px; padding: 16px;
+  text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+.stat-number {
+  font-size: 28px; font-weight: 700; color: var(--primary);
+}
+.stat-label {
+  font-size: 13px; color: var(--light-text); margin-top: 4px;
+}
+.stat-item.primary .stat-number { color: var(--secondary); }
+.stat-item.success .stat-number { color: var(--success); }
+.stat-item.accent .stat-number { color: var(--accent); }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.bullet-list {
+  list-style: none; display: flex; flex-direction: column; gap: 8px;
+}
+.bullet-list li {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 14px; line-height: 1.5;
+}
+.bullet-list li::before {
+  content: "▸"; font-size: 16px; color: var(--secondary);
+  flex-shrink: 0; margin-top: 2px;
+}
+.bullet-list.bullet-primary li::before { color: var(--primary); }
+.bullet-list.bullet-success li::before { color: var(--success); }
+.bullet-list.bullet-accent li::before { color: var(--accent); }
+.bullet-list.bullet-info li::before { color: var(--info); }
+.bullet-list.bullet-warning li::before { color: var(--warning); }
+.image-section {
+  background: var(--white); border-radius: 10px; padding: 0;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08); flex-shrink: 0;
+}
+.image-section img, .image-section svg {
+  width: 100%; height: 100%; object-fit: contain;
+}
+.svg-container {
+  background: var(--bg); border-radius: 10px; padding: 0; min-height: 320px;
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+}
+.svg-container svg { max-width: 100%; max-height: 100%; }
+.nav {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 100;
+  width: 70px; height: 70px; border-radius: 50%; background: var(--white);
+  border: none; color: var(--primary); font-size: 26px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: transform 0.2s;
+}
+.nav:hover { transform: translateY(-50%) scale(1.1); }
+.nav.prev { left: 25px; }
+.nav.next { right: 25px; }
+.progress-container {
+  position: absolute; top: 0; left: 0; height: 4px; background: rgba(255,255,255,0.2);
+}
+.progress-bar {
+  height: 100%; background: var(--secondary); width: 0%; transition: width 0.3s;
+}
+.callout {
+  border-radius: 8px; padding: 12px 16px; margin: 8px 0; font-size: 14px;
+}
+.callout-primary {
+  background: #e3f2fd; border-left: 3px solid var(--secondary);
+}
+.callout-success {
+  background: #e8f6e8; border-left: 3px solid var(--success);
+}
+.callout-accent {
+  background: #fdecea; border-left: 3px solid var(--accent);
+}
+.callout-info {
+  background: #e0f2f1; border-left: 3px solid var(--info);
+}
+.callout-warning {
+  background: #fdf6e3; border-left: 3px solid var(--warning);
+}
+.sources {
+  font-size: 12px; color: var(--light-text); display: flex; flex-wrap: wrap; gap: 6px;
+}
+.sources span {
+  background: #ecf0f1; padding: 5px 10px; border-radius: 6px; font-size: 11px;
+}
+@media (max-width: 768px) {
+  .slide { padding: 16px 16px; }
+  .slide-title { font-size: 22px; }
+  .two-col { grid-template-columns: 1fr; }
+  .three-col { grid-template-columns: 1fr 1fr; }
+  .nav { display: none; }
+}
+@media print {
+  body { background: #fff; }
+  .slide { page-break-after: always; height: auto; }
+  .nav, .progress-container { display: none; }
+  .slide-number { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="slide-container">
+  <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
+
+  <button class="nav prev" onclick="changeSlide(-1)">&#10094;</button>
+  <button class="nav next" onclick="changeSlide(1)">&#10095;</button>
